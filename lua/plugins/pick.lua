@@ -14,12 +14,14 @@ vim.keymap.set("n", "<Leader>sn", function()
     })
 end, { desc = "Find in Neovim config" })
 
+
+vim.env.RIPGREP_CONFIG_PATH = vim.fn.expand("~/.config/ripgrep/config")
 vim.keymap.set("n", "<Leader>sg", function()
-  MiniPick.builtin.grep_live()
+    MiniPick.builtin.grep_live({ tool = 'rg' })
 end, { desc = "Live content search (grep)" })
 
 vim.keymap.set("n", "<Leader>sr", function()
-  MiniPick.builtin.cli({ command = { 'git', 'ls-files' } })
+    MiniPick.builtin.cli({ command = { 'git', 'ls-files' } })
 end, { desc = "Find in git repo" })
 
 vim.keymap.set("n", "<leader>sf", function()
