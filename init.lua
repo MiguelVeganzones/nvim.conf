@@ -89,7 +89,6 @@ vim.keymap.set("n", "<C-Right>", "<C-w>5>", { desc = "Resize window wider" })
 --------------------
 -- Copy Pasting
 --------------------
-vim.o.clipboard = unnamedplus
 vim.keymap.set({ 'n', 'v', 'x' }, '<Leader>y', '"+y', { noremap = true, desc = "Yank to system clipboard" })
 vim.keymap.set({ 'n', 'v', 'x' }, '<Leader>Y', '"+Y', { noremap = true, desc = "Yank line to system clipboard" })
 vim.keymap.set({ 'n', 'v', 'x' }, '<Leader>p', '"+p', { noremap = true, desc = "Paste from system clipboard" })
