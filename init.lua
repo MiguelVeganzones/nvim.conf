@@ -11,9 +11,8 @@ vim.g.loaded_node_provider = 0
 vim.o.updatetime = 300
 vim.o.timeoutlen = 1000
 vim.o.compatible = false
-vim.o.showmode = true
+vim.o.showmode = false
 vim.opt.wildignore = { "*.o", "*.a", "*.obj" }
-vim.cmd('set path+=**')
 vim.o.smartindent = true
 vim.o.wildmenu = true
 vim.o.wildoptions = "pum"
@@ -123,7 +122,8 @@ for i = 1, 9 do
         { noremap = true, silent = true }
     )
 end
-vim.keymap.set("n", "<Leader>b", "<cmd>buffers<CR>", { desc = "Show buffers" }) vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<Leader>b", "<cmd>buffers<CR>", { desc = "Show buffers" })
+vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { desc = "Prev buffer" })
 
 --------------------
@@ -133,7 +133,7 @@ vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { desc = "Prev buffer" })
 vim.keymap.set("v", "<Leader>r", "\"hy:%s/<C-r>h//g<Left><Left>")
 
 --------------------
--- Temrinal
+-- Terminal
 --------------------
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
@@ -141,11 +141,11 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 -- Packages
 --------------------
 vim.pack.add({
-    { src = "https://github.com/stevearc/oil.nvim" },
     { src = "https://github.com/echasnovski/mini.pick" },
     { src = "https://github.com/neovim/nvim-lspconfig" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-    { src = "https://github.com/pocco81/auto-save.nvim" },
+    { src = "https://github.com/stevearc/oil.nvim" },
+    { src = "https://github.com/windwp/nvim-autopairs" },
 })
 
 -- Treesitter
@@ -189,12 +189,12 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 -- Autopair
 --------------------
 
-vim.keymap.set("i", "'", "''<Left>")
-vim.keymap.set("i", "\"", "\"\"<Left>")
-vim.keymap.set("i", "(", "()<Left>")
-vim.keymap.set("i", "{", "{}<Left>")
-vim.keymap.set("i", "[", "[]<Left>")
-vim.keymap.set("i", "/*", "/**/<Left><Left>")
+-- vim.keymap.set("i", "'", "''<Left>")
+-- vim.keymap.set("i", "\"", "\"\"<Left>")
+-- vim.keymap.set("i", "(", "()<Left>")
+-- vim.keymap.set("i", "{", "{}<Left>")
+-- vim.keymap.set("i", "[", "[]<Left>")
+-- vim.keymap.set("i", "/*", "/**/<Left><Left>")
 
 --------------------
 -- Status Line

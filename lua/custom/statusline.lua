@@ -79,7 +79,7 @@ end
 vim.api.nvim_set_hl(0, "StatusLineBold", { bold = true })
 
 vim.o.statusline = table.concat({
-    "  %#StatusLineBold#%{v:lua.status_mode()}%#StatusLine#",
+    "  %#StatusLineBold#%{v:lua.status_mode()}%#StatusLine |#",
     " | %f",
     " | %{v:lua.status_git_branch()}",
     --" | %{v:lua.status_filetype()}",
