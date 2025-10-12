@@ -48,18 +48,19 @@ vim.o.linebreak = true
 vim.o.breakat = " ^I!@*-+;:,./?" -- default
 -- Tabs
 vim.o.expandtab = true
+vim.o.smarttab = true
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
 -- Unprintable Symbols
 vim.o.list = true
 vim.opt.listchars = { -- Show unprintable symbols
-    tab = "» ",
-    trail = "·",
-    nbsp = "␣",
-    extends = "►",
-    precedes = "◄",
-    conceal = "▒",
+  tab = "» ",
+  trail = "·",
+  nbsp = "␣",
+  extends = "►",
+  precedes = "◄",
+  conceal = "▒",
 }
 -- Popups
 vim.o.winborder = "rounded"
@@ -95,11 +96,11 @@ vim.keymap.set({ 'n', 'v', 'x' }, '<Leader>P', '"+P', { noremap = true, desc = "
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight when yanking (copying) text",
-    group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
-    callback = function()
-        vim.hl.on_yank()
-    end,
+  desc = "Highlight when yanking (copying) text",
+  group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
 })
 
 --------------------
@@ -115,12 +116,12 @@ vim.o.inccommand = "split" -- Preview substitutions live, as you type!
 -- Buffers
 --------------------
 for i = 1, 9 do
-    vim.api.nvim_set_keymap(
-        "n",
-        "<leader>" .. i,
-        "<cmd>buffer " .. i .. "<CR>",
-        { noremap = true, silent = true }
-    )
+  vim.api.nvim_set_keymap(
+    "n",
+    "<leader>" .. i,
+    "<cmd>buffer " .. i .. "<CR>",
+    { noremap = true, silent = true }
+  )
 end
 vim.keymap.set("n", "<Leader>b", "<cmd>buffers<CR>", { desc = "Show buffers" })
 vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
@@ -141,12 +142,14 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 -- Packages
 --------------------
 vim.pack.add({
-    { src = "https://github.com/echasnovski/mini.pick" },
-    { src = "https://github.com/neovim/nvim-lspconfig" },
-    { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-    { src = "https://github.com/stevearc/oil.nvim" },
-    { src = "https://github.com/windwp/nvim-autopairs" },
+  { src = "https://github.com/echasnovski/mini.pick" },
+  { src = "https://github.com/neovim/nvim-lspconfig" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+  { src = "https://github.com/stevearc/oil.nvim" },
+  -- { src = "https://github.com/windwp/nvim-autopairs" },
 })
+vim.keymap.set('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',
+  { noremap = true, silent = true })
 
 -- Treesitter
 require("plugins/treesitter")
@@ -176,12 +179,12 @@ require("plugins.pick")
 -- Autocomplete
 --------------------
 vim.api.nvim_create_autocmd('LspAttach', {
-    callback = function(ev)
-        local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        if client and client:supports_method('textDocument/completion') then
-            vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-        end
-    end,
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client and client:supports_method('textDocument/completion') then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+  end,
 })
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
@@ -220,3 +223,19 @@ vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 -- Visual mode indentation
 vim.keymap.set('v', "<", "<gv", { desc = 'Indent left and reselect' })
 vim.keymap.set('v', ">", ">gv", { desc = 'Indent right and reselect' })
+
+-- Text manipulation
+vim.keymap.set('n', "ci_", "T_ct_")
+vim.keymap.set('n', "di_", "T_dt_")
+
+--------------------
+-- Overrides
+--------------------
+-- llvm
+local cwd = vim.fn.getcwd()
+if cwd:match("llvm%-project") then
+  local llvm_config = vim.fn.stdpath("config") .. "/lua/custom/llvm/vimrc"
+  if vim.fn.filereadable(llvm_config) == 1 then
+    vim.cmd("source " .. vim.fn.expand(llvm_config))
+  end
+end
