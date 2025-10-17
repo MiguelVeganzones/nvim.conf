@@ -5,13 +5,14 @@ vim.b.git_branch = ""
 vim.b.lsp_clients = "No LSP"
 
 -- ========================
--- Cache updaters
+-- Cache update
 -- ========================
 local function update_git_branch()
-    local branch = vim.fn.system(
-        "git -C " .. vim.fn.expand("%:p:h") .. " branch --show-current 2>/dev/null"
-    ):gsub("%s+", "")
-    vim.b.git_branch = branch ~= "" and branch or "No Git"
+    local file_dir = vim.fn.expand("%:p:h")
+    local branch = vim.fn.system({
+        "git", "-C", file_dir, "branch", "--show-current"
+    }):gsub("%s+", "")
+    vim.b.git_branch = (vim.v.shell_error == 0 and branch ~= "") and branch or "No Git"
 end
 
 local function update_lsp_clients()

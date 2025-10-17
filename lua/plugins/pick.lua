@@ -3,7 +3,7 @@ vim.keymap.set("n", "<Leader>sb", function() MiniPick.builtin.buffers() end, { d
 vim.keymap.set("n", "<Leader>sh", function() MiniPick.builtin.help() end, { desc = "Find help" })
 
 vim.keymap.set("n", "<Leader>sn", function()
-    local cwd = vim.fn.expand("~/.config/nvim")
+    local cwd = vim.fn.stdpath("config")
     MiniPick.builtin.cli({
         command = { "fd", "--type", "f", ".", "--hidden" },
     }, {
@@ -15,7 +15,11 @@ vim.keymap.set("n", "<Leader>sn", function()
 end, { desc = "Find in Neovim config" })
 
 
-vim.env.RIPGREP_CONFIG_PATH = vim.fn.expand("~/.config/ripgrep/config")
+if vim.fn.has("win32") == 1 then
+    vim.env.RIPGREP_CONFIG_PATH = vim.fn.expand("~/AppData/Local/ripgrep/config")
+else
+    vim.env.RIPGREP_CONFIG_PATH = vim.fn.expand("~/.config/ripgrep/config")
+end
 vim.keymap.set("n", "<Leader>sg", function()
     MiniPick.builtin.grep_live({ tool = 'rg' })
 end, { desc = "Live content search (grep)" })

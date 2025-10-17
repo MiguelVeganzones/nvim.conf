@@ -234,8 +234,12 @@ vim.keymap.set('n', "di_", "T_dt_")
 -- llvm
 local cwd = vim.fn.getcwd()
 if cwd:match("llvm%-project") then
-  local llvm_config = vim.fn.stdpath("config") .. "/lua/custom/llvm/vimrc"
-  if vim.fn.filereadable(llvm_config) == 1 then
-    vim.cmd("source " .. vim.fn.expand(llvm_config))
+  local llvm_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+    vim.print("")
+  if vim.v.shell_error == 0 then
+    local llvm_vimrc = llvm_root .. "/llvm/utils/vim/vimrc"
+    if vim.fn.filereadable(llvm_vimrc) == 1 then
+      vim.cmd("source " .. vim.fn.fnameescape(llvm_vimrc))
+    end
   end
 end
