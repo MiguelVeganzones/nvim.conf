@@ -146,6 +146,7 @@ vim.pack.add({
   { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
   { src = "https://github.com/stevearc/oil.nvim" },
+  { src = "https://github.com/akinsho/git-conflict.nvim" },
   -- { src = "https://github.com/windwp/nvim-autopairs" },
 })
 vim.keymap.set('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',
@@ -168,12 +169,13 @@ vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, { desc = "[C]ode [A]c
 vim.keymap.set("n", "<Leader>f", function() vim.lsp.buf.format({ async = true }) end, { desc = "[F]ormat code" })
 
 -- Oil
-require "oil".setup()
 require("plugins.oil")
 
 -- Pick
-require "mini.pick".setup()
 require("plugins.pick")
+
+-- Git Conflict
+require("plugins.git-conflict")
 
 --------------------
 -- Autocomplete
