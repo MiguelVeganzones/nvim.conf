@@ -143,13 +143,14 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 --------------------
 -- Packages
 --------------------
+local enable_copilot = vim.env.NVIM_ENABLE_COPILOT == "1"
 vim.pack.add({
     { src = "https://github.com/echasnovski/mini.pick" },
     { src = "https://github.com/neovim/nvim-lspconfig" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
     { src = "https://github.com/stevearc/oil.nvim" },
-  { src = "https://github.com/akinsho/git-conflict.nvim" },
-    { src = "https://github.com/github/copilot.vim.git" },
+    { src = "https://github.com/akinsho/git-conflict.nvim" },
+    enable_copilot and { src = "https://github.com/github/copilot.vim.git" } or nil,
 })
 
 -- Define diagnostic signs (optional - makes it prettier)
