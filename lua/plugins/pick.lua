@@ -1,3 +1,5 @@
+require("mini.pick").setup()
+
 vim.keymap.set("n", "<Leader>sb", function() MiniPick.builtin.buffers() end, { desc = "Find buffers" })
 
 vim.keymap.set("n", "<Leader>sh", function() MiniPick.builtin.help() end, { desc = "Find help" })
