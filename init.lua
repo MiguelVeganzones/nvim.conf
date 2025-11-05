@@ -167,6 +167,7 @@ require("plugins/treesitter")
 require("lsp.clangd")
 require("lsp.lua_ls")
 require("lsp.pylsp")
+require("lsp.cmake")
 
 vim.keymap.set("n", "<Leader>gd", vim.lsp.buf.definition, { desc = "[G]o to [D]efinition" })
 vim.keymap.set("n", "<Leader>gi", vim.lsp.buf.implementation, { desc = "[G]o to [I]mplementation" })
@@ -183,7 +184,9 @@ require("plugins.oil")
 require("plugins.pick")
 
 -- Copilot
-require("plugins/copilot")
+if enable_copilot then
+    require("plugins/copilot")
+end
 
 -- Git Conflict
 require("plugins.git-conflict")
