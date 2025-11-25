@@ -150,10 +150,11 @@ vim.pack.add({
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
     { src = "https://github.com/stevearc/oil.nvim" },
     { src = "https://github.com/akinsho/git-conflict.nvim" },
+    { src = "https://github.com/lervag/vimtex" },
     enable_copilot and { src = "https://github.com/github/copilot.vim.git" } or nil,
 })
 
--- Define diagnostic signs (optional - makes it prettier)
+-- Diagnostic signs
 local signs = { Error = "󰅚 ", Warn = "󰀪 ", Hint = "󰌶 ", Info = " " }
 for type, icon in pairs(signs) do
     local hl = "DiagnosticSign" .. type
@@ -190,6 +191,14 @@ end
 
 -- Git Conflict
 require("plugins.git-conflict")
+
+-- VimTeX
+require("plugins.vimtex")
+
+-- Copilot
+if enable_copilot then
+    require("plugins.copilot")
+end
 
 --------------------
 -- Autocomplete
@@ -277,6 +286,9 @@ vim.keymap.set('v', ">", ">gv", { desc = 'Indent right and reselect' })
 vim.keymap.set('n', "vi_", "T_vt_")
 vim.keymap.set('n', "ci_", "T_ct_")
 vim.keymap.set('n', "di_", "T_dt_")
+vim.keymap.set('n', "vi,", "T,vt,")
+vim.keymap.set('n', "ci,", "T,ct,")
+vim.keymap.set('n', "di,", "T,dt,")
 
 --------------------
 -- Overrides
