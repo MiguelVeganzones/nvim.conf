@@ -1,0 +1,13 @@
+{
+  "plugins": {
+    "git-conflict.nvim": [],
+    "mini.pick": [],
+    "nvim-lspconfig": [],
+    "nvim-treesitter": [],
+    "oil.nvim": [],
+    "vimtex": {
+      "rev": "32bcb392",
+      "src": "https://github.com/lervag/vimtex"
+    }
+  }
+}
