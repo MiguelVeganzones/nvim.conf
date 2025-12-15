@@ -133,7 +133,7 @@ vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { noremap = true, silent = true
 -- Visual
 --------------------
 
-vim.keymap.set("v", "<Leader>r", "\"hy:%s/<C-r>h//g<Left><Left>")
+vim.keymap.set("v", "<Leader>r", "\"hy:%s/\\<<C-r>h\\>//g<Left><Left>")
 
 --------------------
 -- Terminal
