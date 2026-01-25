@@ -7,7 +7,8 @@
     "oil.nvim": [],
     "vimtex": {
       "rev": "32bcb392",
-      "src": "https://github.com/lervag/vimtex"
+      "src": "https://github.com/lervag/vimtex",
+      "version": "'master'"
     }
   }
 }
