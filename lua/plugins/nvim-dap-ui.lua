@@ -14,3 +14,11 @@ end
 dap.listeners.before.event_exited["dapui"] = function()
   dapui.close()
 end
+
+-- =========================
+-- Keymaps
+-- =========================
+
+vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function()
+    require('dap.ui.widgets').preview()
+end)
