@@ -143,15 +143,19 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 --------------------
 -- Packages
 --------------------
-local enable_copilot = vim.env.NVIM_ENABLE_COPILOT == "1"
 vim.pack.add({
+    { src = "https://github.com/akinsho/git-conflict.nvim" },
+    { src = "https://github.com/danymat/neogen" },
     { src = "https://github.com/echasnovski/mini.pick" },
+    { src = "https://github.com/iamcco/markdown-preview.nvim" },
+    { src = "https://github.com/lervag/vimtex",                  version = 'master', },
+    { src = "https://github.com/mfussenegger/nvim-dap" },
+    { src = "https://github.com/nvim-neotest/nvim-nio" },
+    { src = "https://github.com/rcarriga/nvim-dap-ui" },
     { src = "https://github.com/neovim/nvim-lspconfig" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-    { src = "https://github.com/stevearc/oil.nvim" },
-    { src = "https://github.com/akinsho/git-conflict.nvim" },
-    { src = "https://github.com/lervag/vimtex",                  version = 'master', },
-    enable_copilot and { src = "https://github.com/github/copilot.vim.git" } or nil,
+    { src = "https://github.com/nvim-mini/mini.files.git" },
+    { src = "https://github.com/NeogitOrg/neogit.git" },
 })
 
 -- Diagnostic signs
@@ -161,8 +165,15 @@ for type, icon in pairs(signs) do
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
+-- Keymaps
+require("keymaps")
+
 -- Treesitter
-require("plugins/treesitter")
+require("plugins.treesitter")
+
+-- Git
+require("plugins.neogit")
+require("plugins.git-conflict")
 
 -- LSP
 require("lsp.clangd")
@@ -178,27 +189,24 @@ vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename, { desc = "[R]e[n]ame symbo
 vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, { desc = "[C]ode [A]ction" })
 vim.keymap.set("n", "<Leader>f", function() vim.lsp.buf.format({ async = true }) end, { desc = "[F]ormat code" })
 
--- Oil
-require("plugins.oil")
+-- Files
+require("plugins.mini-files")
+
+-- DAP
+require("plugins.nvim-dap")
+require("plugins.nvim-dap-ui")
 
 -- Pick
-require("plugins.pick")
-
--- Copilot
-if enable_copilot then
-    require("plugins/copilot")
-end
-
--- Git Conflict
-require("plugins.git-conflict")
+require("plugins.mini-pick")
 
 -- VimTeX
 require("plugins.vimtex")
 
--- Copilot
-if enable_copilot then
-    require("plugins.copilot")
-end
+-- Neogen
+require("plugins.neogen")
+
+-- Markdown Preview
+require("plugins.mdpreview")
 
 --------------------
 -- Autocomplete
