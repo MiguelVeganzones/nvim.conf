@@ -8,7 +8,6 @@ vim.g.python3_host_prog = vim.fn.expand("~/.venvs/nvim/" ..
     (vim.fn.has("win32") == 1 and "Scripts/python.exe" or "bin/python"))
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
-vim.g.loaded_node_provider = 1
 vim.o.updatetime = 300
 vim.o.timeoutlen = 1000
 vim.o.compatible = false
@@ -151,6 +150,7 @@ vim.pack.add({
     { src = "https://github.com/stevearc/oil.nvim" },
     { src = "https://github.com/akinsho/git-conflict.nvim" },
     { src = "https://github.com/lervag/vimtex" },
+    { src = "https://github.com/junegunn/vim-easy-align" },
     enable_copilot and { src = "https://github.com/github/copilot.vim.git" } or nil,
 })
 
