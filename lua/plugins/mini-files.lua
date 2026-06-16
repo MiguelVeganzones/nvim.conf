@@ -7,8 +7,10 @@ require("mini.files").setup({
 })
 
 vim.keymap.set("n", "-", function()
+    if vim.bo.filetype == "minifiles" then
+        return
+    end
     local buf_name = vim.api.nvim_buf_get_name(0)
-
     if buf_name ~= "" then
         require("mini.files").open(buf_name, true)
     else
@@ -24,26 +26,81 @@ end, {
     desc = "Open mini.files at cwd",
 })
 
-vim.g.minifiles_show_dotfiles = true
+local show_dotfiles = true
 
-local filter_show = function()
-  return true
-end
+local filter_show = function(fs_entry) return true end
 
 local filter_hide = function(fs_entry)
-  return not vim.startswith(fs_entry.name, ".")
+    return not vim.startswith(fs_entry.name, '.')
 end
 
 local toggle_dotfiles = function()
-  vim.g.minifiles_show_dotfiles = not vim.g.minifiles_show_dotfiles
-
-  local new_filter = vim.g.minifiles_show_dotfiles
-      and filter_show
-      or filter_hide
-
-  require("mini.files").refresh({ content = { filter = new_filter } })
+    show_dotfiles = not show_dotfiles
+    local new_filter = show_dotfiles and filter_show or filter_hide
+    MiniFiles.refresh({ content = { filter = new_filter } })
 end
 
-vim.keymap.set("n", "g.", toggle_dotfiles, {
-  desc = "Toggle dotfiles",
+vim.api.nvim_create_autocmd('User', {
+    pattern = 'MiniFilesBufferCreate',
+    callback = function(args)
+        local buf_id = args.data.buf_id
+        -- Tweak left-hand side of mapping to your liking
+        vim.keymap.set('n', 'g.', toggle_dotfiles, { buffer = buf_id })
+    end,
+})
+
+local map_split = function(buf_id, lhs, direction)
+    local rhs = function()
+        -- Make new window and set it as target
+        local cur_target = MiniFiles.get_explorer_state().target_window
+        local new_target = vim.api.nvim_win_call(cur_target, function()
+            vim.cmd(direction .. ' split')
+            return vim.api.nvim_get_current_win()
+        end)
+        MiniFiles.set_target_window(new_target)
+        MiniFiles.go_in()
+    end
+
+    -- Adding `desc` will result into `show_help` entries
+    local desc = 'Split ' .. direction
+    vim.keymap.set('n', lhs, rhs, { buffer = buf_id, desc = desc })
+end
+
+vim.api.nvim_create_autocmd('User', {
+    pattern = 'MiniFilesBufferCreate',
+    callback = function(args)
+        local buf_id = args.data.buf_id
+        -- Tweak keys to your liking
+        map_split(buf_id, '<C-s>', 'belowright horizontal')
+        map_split(buf_id, '<C-v>', 'belowright vertical')
+        map_split(buf_id, '<C-t>', 'tab')
+    end,
+})
+
+-- Set focused directory as current working directory
+local set_cwd = function()
+    local path = (MiniFiles.get_fs_entry() or {}).path
+    if path == nil then return vim.notify('Cursor is not on valid entry') end
+    vim.fn.chdir(vim.fs.dirname(path))
+    print("cwd -> " .. vim.fn.getcwd())
+end
+
+-- Yank in register full path of entry under cursor
+local yank_path = function()
+    local path = (MiniFiles.get_fs_entry() or {}).path
+    if path == nil then return vim.notify('Cursor is not on valid entry') end
+    vim.fn.setreg(vim.v.register, path)
+end
+
+-- Open path with system default handler (useful for non-text files)
+local ui_open = function() vim.ui.open(MiniFiles.get_fs_entry().path) end
+
+vim.api.nvim_create_autocmd('User', {
+    pattern = 'MiniFilesBufferCreate',
+    callback = function(args)
+        local b = args.data.buf_id
+        vim.keymap.set('n', 'g~', set_cwd, { buffer = b, desc = 'Set cwd' })
+        vim.keymap.set('n', 'gX', ui_open, { buffer = b, desc = 'OS open' })
+        vim.keymap.set('n', 'gy', yank_path, { buffer = b, desc = 'Yank path' })
+    end,
 })
