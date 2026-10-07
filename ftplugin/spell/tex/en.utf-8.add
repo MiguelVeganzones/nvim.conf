@@ -49,3 +49,7 @@ reorderable
 deduplication
 microbenchmark
 virtualization
+metaprogramming
+constexpr
+tradeoffs
+inlining
