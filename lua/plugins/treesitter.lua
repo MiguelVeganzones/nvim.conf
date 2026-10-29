@@ -1,37 +1,18 @@
-require "nvim-treesitter".setup({
-    ensure_installed = {
-        "bash",
-        "c",
-        "cmake",
-        "cpp",
-        "cuda",
-        "diff",
-        "json",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-    },
-    highlight = { enable = true },
-    indent = {
-        enable = true,
-        disable = { "python" },
-    },
-    incremental_selection = {
-        enable = true,
-        keymaps = {
-            init_selection = "gs",
-            node_incremental = "gi",
-            node_decremental = "gd",
-        },
-    },
-    use_languagetree = true,
-    disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-            return true
+-- nvim-treesitter `main` branch: needs the `tree-sitter` CLI and a C compiler to install parsers
+local languages = {
+    "bash", "c", "cmake", "cpp", "cuda", "diff", "json", "lua", "markdown", "markdown_inline", "python",
+}
+if vim.fn.executable("tree-sitter") == 1 then
+    require("nvim-treesitter").install(languages)
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+    callback = function(ev)
+        local file = vim.uv.fs_stat(ev.file)
+        if file and file.size > 100 * 1024 then return end -- skip large files
+        if not pcall(vim.treesitter.start, ev.buf) then return end
+        if ev.match ~= "python" then
+            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end
     end,
-    additional_vim_regex_highlighting = { "cpp" },
 })

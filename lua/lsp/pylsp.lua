@@ -1,5 +1,4 @@
 vim.lsp.config("pylsp", {
-    cmd = { "pylsp" },
     settings = {
         pylsp = {
             plugins = {

@@ -40,15 +40,6 @@ local toggle_dotfiles = function()
     MiniFiles.refresh({ content = { filter = new_filter } })
 end
 
-vim.api.nvim_create_autocmd('User', {
-    pattern = 'MiniFilesBufferCreate',
-    callback = function(args)
-        local buf_id = args.data.buf_id
-        -- Tweak left-hand side of mapping to your liking
-        vim.keymap.set('n', 'g.', toggle_dotfiles, { buffer = buf_id })
-    end,
-})
-
 local map_split = function(buf_id, lhs, direction)
     local rhs = function()
         -- Make new window and set it as target
@@ -65,17 +56,6 @@ local map_split = function(buf_id, lhs, direction)
     local desc = 'Split ' .. direction
     vim.keymap.set('n', lhs, rhs, { buffer = buf_id, desc = desc })
 end
-
-vim.api.nvim_create_autocmd('User', {
-    pattern = 'MiniFilesBufferCreate',
-    callback = function(args)
-        local buf_id = args.data.buf_id
-        -- Tweak keys to your liking
-        map_split(buf_id, '<C-s>', 'belowright horizontal')
-        map_split(buf_id, '<C-v>', 'belowright vertical')
-        map_split(buf_id, '<C-t>', 'tab')
-    end,
-})
 
 -- Set focused directory as current working directory
 local set_cwd = function()
@@ -99,6 +79,10 @@ vim.api.nvim_create_autocmd('User', {
     pattern = 'MiniFilesBufferCreate',
     callback = function(args)
         local b = args.data.buf_id
+        map_split(b, '<C-s>', 'belowright horizontal')
+        map_split(b, '<C-v>', 'belowright vertical')
+        map_split(b, '<C-t>', 'tab')
+        vim.keymap.set('n', 'g.', toggle_dotfiles, { buffer = b, desc = 'Toggle dotfiles' })
         vim.keymap.set('n', 'g~', set_cwd, { buffer = b, desc = 'Set cwd' })
         vim.keymap.set('n', 'gX', ui_open, { buffer = b, desc = 'OS open' })
         vim.keymap.set('n', 'gy', yank_path, { buffer = b, desc = 'Yank path' })

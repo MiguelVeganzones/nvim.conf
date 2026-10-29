@@ -1,13 +1,8 @@
 -- ========================
--- Cached data
--- ========================
-vim.b.git_branch = ""
-vim.b.lsp_clients = "No LSP"
-
--- ========================
 -- Cache update
 -- ========================
 local function update_git_branch()
+    if vim.bo.buftype ~= "" then return end
     local file_dir = vim.fn.expand("%:p:h")
     local branch = vim.fn.system({
         "git", "-C", file_dir, "branch", "--show-current"
@@ -15,23 +10,10 @@ local function update_git_branch()
     vim.b.git_branch = (vim.v.shell_error == 0 and branch ~= "") and branch or "No Git"
 end
 
-local function update_lsp_clients()
-    local clients = vim.lsp.get_clients({ bufnr = 0 })
-    if #clients > 0 then
-        vim.b.lsp_clients = table.concat(
-            vim.tbl_map(function(c) return c.name end, clients),
-            ", "
-        )
-    else
-        vim.b.lsp_clients = "No LSP"
-    end
-end
-
 -- ========================
 -- Autocommands
 -- ========================
 vim.api.nvim_create_autocmd("BufEnter", { callback = update_git_branch })
-vim.api.nvim_create_autocmd({ "LspAttach", "LspDetach" }, { callback = update_lsp_clients })
 
 -- ========================
 -- Display functions (globals)
@@ -71,7 +53,8 @@ function _G.status_git_branch()
 end
 
 function _G.status_lsp_clients()
-    return vim.b.lsp_clients or "No LSP"
+    local names = vim.tbl_map(function(c) return c.name end, vim.lsp.get_clients({ bufnr = 0 }))
+    return #names > 0 and table.concat(names, ", ") or "No LSP"
 end
 
 -- ========================
@@ -80,7 +63,7 @@ end
 vim.api.nvim_set_hl(0, "StatusLineBold", { bold = true })
 
 vim.o.statusline = table.concat({
-    "  %#StatusLineBold#%{v:lua.status_mode()}%#StatusLine |#",
+    "  %#StatusLineBold#%{v:lua.status_mode()}%#StatusLine#",
     " | %f",
     " | %{v:lua.status_git_branch()}",
     --" | %{v:lua.status_filetype()}",
