@@ -1,7 +1,14 @@
 local dap = require("dap")
 local dapui = require("dapui")
 
-dapui.setup()
+dapui.setup({
+    floating = {
+        border = "rounded",
+        mappings = {
+            close = { "q", "<Esc>" },
+        },
+    },
+})
 
 dap.listeners.after.event_initialized["dapui"] = function() dapui.open() end
 dap.listeners.before.event_terminated["dapui"] = function() dapui.close() end

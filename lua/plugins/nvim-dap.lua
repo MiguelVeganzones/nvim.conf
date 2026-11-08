@@ -1,4 +1,5 @@
 local dap = require("dap")
+local dapui = require("dapui")
 
 -- =========================
 -- PYTHON (debugpy, installed in the nvim venv)
@@ -10,36 +11,67 @@ dap.adapters.debugpy = {
 }
 
 dap.configurations.python = {
-  {
-    type = "debugpy",
-    request = "launch",
-    name = "Launch current file",
-    program = "${file}",
-  },
+    {
+        type = "debugpy",
+        request = "launch",
+        name = "Launch current file",
+        program = "${file}",
+    },
 }
 
 -- =========================
--- C / C++ (GDB)
+-- C / C++
 -- =========================
+
 dap.adapters.gdb = {
-  type = "executable",
-  command = "gdb",
-  args = { "--interpreter=dap" },
+    type = "executable",
+    command = "gdb",
+    args = { "--interpreter=dap" },
 }
 
 dap.configurations.c = {
-  {
-    name = "Launch (gdb)",
-    type = "gdb",
-    request = "launch",
-    program = function()
-      return vim.fn.input("Executable: ", vim.fn.getcwd() .. "/", "file")
-    end,
-    cwd = "${workspaceFolder}",
-  },
+    {
+        name = "Launch (gdb)",
+        type = "gdb",
+        request = "launch",
+        program = function()
+            return vim.fn.input(
+                "Executable: ",
+                vim.fn.getcwd() .. "/",
+                "file"
+            )
+        end,
+        cwd = "${workspaceFolder}",
+    },
 }
 
 dap.configurations.cpp = dap.configurations.c
+
+-- =========================
+-- CMake
+-- =========================
+
+dap.adapters.cmake = {
+    type = "pipe",
+    pipe = "${pipe}",
+
+    executable = {
+        command = "cmake",
+        args = {
+            "--debugger",
+            "--debugger-pipe",
+            "${pipe}",
+        },
+    },
+}
+
+dap.configurations.cmake = {
+    {
+        name = "Debug CMake",
+        type = "cmake",
+        request = "launch",
+    },
+}
 
 -- =========================
 -- Keymaps
