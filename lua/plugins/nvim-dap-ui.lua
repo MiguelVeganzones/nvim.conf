@@ -11,5 +11,5 @@ dapui.setup({
 })
 
 dap.listeners.after.event_initialized["dapui"] = function() dapui.open() end
-dap.listeners.before.event_terminated["dapui"] = function() dapui.close() end
-dap.listeners.before.event_exited["dapui"] = function() dapui.close() end
+-- No auto-close: keeps the console/REPL visible after the program exits
+vim.keymap.set("n", "<Leader>du", dapui.toggle, { desc = "Debug: toggle [U]I" })

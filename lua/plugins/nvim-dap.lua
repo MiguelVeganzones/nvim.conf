@@ -1,13 +1,12 @@
 local dap = require("dap")
-local dapui = require("dapui")
 
 -- =========================
 -- PYTHON (debugpy, installed in the nvim venv)
 -- =========================
 dap.adapters.debugpy = {
-  type = "executable",
-  command = vim.g.python3_host_prog,
-  args = { "-m", "debugpy.adapter" },
+    type = "executable",
+    command = vim.g.python3_host_prog,
+    args = { "-m", "debugpy.adapter" },
 }
 
 dap.configurations.python = {
@@ -16,6 +15,14 @@ dap.configurations.python = {
         request = "launch",
         name = "Launch current file",
         program = "${file}",
+        -- Run the program with the project's python, not the nvim venv running the adapter
+        python = function()
+            local venv = vim.env.VIRTUAL_ENV
+            if venv then
+                return venv .. (vim.fn.has("win32") == 1 and "/Scripts/python.exe" or "/bin/python")
+            end
+            return vim.fn.exepath("python")
+        end,
     },
 }
 
