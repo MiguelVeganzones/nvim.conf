@@ -305,7 +305,7 @@ vim.keymap.set("x", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("x", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- i_ / i, text objects: work with any operator (vi_, ci,, yi_, ...)
-for _, c in ipairs({ "_", "," }) do
+for _, c in ipairs({ "_", ",", "\\", "/" }) do
     vim.keymap.set({ "x", "o" }, "i" .. c, ":<C-u>normal! T" .. c .. "vt" .. c .. "<CR>",
         { silent = true, desc = "Inside " .. c })
 end
